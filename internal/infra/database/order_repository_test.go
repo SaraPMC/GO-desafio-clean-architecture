@@ -7,8 +7,7 @@ import (
 	"github.com/devfullcycle/20-CleanArch/internal/entity"
 	"github.com/stretchr/testify/suite"
 
-	// sqlite3
-	_ "github.com/mattn/go-sqlite3"
+	_ "modernc.org/sqlite" // SQLite driver puro (sem CGO)
 )
 
 type OrderRepositoryTestSuite struct {
@@ -17,7 +16,7 @@ type OrderRepositoryTestSuite struct {
 }
 
 func (suite *OrderRepositoryTestSuite) SetupSuite() {
-	db, err := sql.Open("sqlite3", ":memory:")
+	db, err := sql.Open("sqlite", ":memory:")
 	suite.NoError(err)
 	db.Exec("CREATE TABLE orders (id varchar(255) NOT NULL, price float NOT NULL, tax float NOT NULL, final_price float NOT NULL, PRIMARY KEY (id))")
 	suite.Db = db
