@@ -1,60 +1,236 @@
-# Desafio Clean Architecture GO
+# 🏗️ Desafio Clean Architecture GO
 
-Para este desafio, você precisará criar o usecase de listagem das orders.
-Esta listagem precisa ser feita com:
-- Endpoint REST (GET /order)
-- Service ListOrders com GRPC
-- Query ListOrders GraphQL
-Não esqueça de criar as migrações necessárias e o arquivo api.http com a request para criar e listar as orders.
+[![Go Version](https://img.shields.io/badge/Go-1.21+-blue.svg)](https://golang.org)
+[![Docker](https://img.shields.io/badge/Docker-Required-blue.svg)](https://docker.com)
+[![MySQL](https://img.shields.io/badge/MySQL-8.0-orange.svg)](https://mysql.com)
 
-Para a criação do banco de dados, utilize o Docker (Dockerfile / docker-compose.yaml), com isso ao rodar o comando docker compose up tudo deverá subir, preparando o banco de dados.
-Inclua um README.md com os passos a serem executados no desafio e a porta em que a aplicação deverá responder em cada serviço.
+## 📋 Sobre o Projeto
+
+Este projeto é resultado de um **desafio prático** de implementação de Clean Architecture em Go. Partindo de uma base existente com funcionalidade de **CreateOrder**, foi desenvolvida a funcionalidade completa de **ListOrder** seguindo os mesmos padrões arquiteturais.
+
+### 🎯 Objetivo do Desafio
+Implementar a listagem de pedidos (ListOrder) em um sistema já existente, garantindo consistência arquitetural através de **múltiplas interfaces de acesso**:
+
+- 🌐 **REST API** - Endpoints HTTP tradicionais
+- ⚡ **gRPC** - Comunicação de alta performance  
+- 🎯 **GraphQL** - Query language flexível
+
+### 🏆 Funcionalidades Implementadas
+
+- ✅ **Criar Pedido** (CreateOrder) - *Já existente*
+- 🆕 **Listar Pedidos** (ListOrder) - **IMPLEMENTADO NO DESAFIO**
+- ✅ **Persistência com MySQL**
+- ✅ **Injeção de Dependência com Wire**
+- ✅ **Event-Driven Architecture**
+
+---
+
+## 🚀 Desafio Proposto
+
+**Contexto:** A partir de um projeto base com funcionalidade de criação de pedidos, implementar a funcionalidade de listagem mantendo os padrões de Clean Architecture.
+
+### 📝 Requisitos do Desafio
+
+1. **UseCase ListOrders** - Implementar a lógica de negócio
+2. **REST Endpoint** - `GET /order` para listagem via HTTP
+3. **gRPC Service** - `ListOrder` para comunicação RPC
+4. **GraphQL Query** - `listOrder` para consultas flexíveis
+5. **Migrações** - Estrutura de banco compatível
+6. **Testes** - Arquivos `.http` para validação
+
+---
+
+## 🚀 Como Executar
+
+### Pré-requisitos
+
+- [Go 1.21+](https://golang.org/dl/)
+- [Docker](https://www.docker.com/)
+- [Docker Compose](https://docs.docker.com/compose/)
+
+### 1️⃣ Subir o Banco de Dados
+
+```bash
+docker compose up -d
+```
+
+> 🔍 **Verificar se subiu:** `docker ps`
+
+### 2️⃣ Inicializar o Banco de Dados
+
+```bash
+cd cmd/initdb
+go run main.go
+```
+
+### 3️⃣ Executar a Aplicação
+
+```bash
+cd cmd/ordersystem
+go run main.go wire_gen.go
+```
+
+### ✅ Confirmação dos Serviços
+
+Se tudo estiver funcionando, você verá:
+
+```
+Starting web server on port :8000
+Starting gRPC server on port 50051  
+Starting GraphQL server on port 8081
+```
+
+---
+
+## 🧪 Como Testar
+
+### 🌐 **REST API** - Porta 8000
+
+#### Criar Pedido
+```http
+POST http://localhost:8000/order
+Content-Type: application/json
+
+{
+    "id": "order-001",
+    "price": 100.50,
+    "tax": 10.05
+}
+```
+
+#### Listar Pedidos
+```http
+GET http://localhost:8000/order
+```
+
+> 📁 **Arquivos de teste:** `api/create_order.http` e `api/list_order.http`
+
+---
+
+### ⚡ **gRPC** - Porta 50051
+
+#### Usando Evans (Recomendado)
+
+```bash
+# Instalar Evans
+choco install evans  # Windows
+# ou baixar de: https://github.com/ktr0731/evans/releases
+
+# Conectar
+evans -r repl -p 50051
+
+# Dentro do Evans:
+package pb
+service OrderService
+call CreateOrder
+call ListOrder
+```
+
+---
+
+### 🎯 **GraphQL** - Porta 8081
+
+#### GraphQL Playground
+Acesse: **http://localhost:8081**
+
+#### Mutations e Queries
+
+**Criar Pedido:**
+```graphql
+mutation {
+  createOrder(input: {
+    id: "gql-001"
+    Price: 200.0
+    Tax: 20.0
+  }) {
+    id
+    Price
+    Tax
+    FinalPrice
+  }
+}
+```
+
+**Listar Pedidos:**
+```graphql
+query {
+  listOrders {
+    id
+    Price
+    Tax
+    FinalPrice
+  }
+}
+```
+
+---
+
+## 📊 Arquitetura
+
+```
+┌─────────────────────────────────────────┐
+│                Interfaces               │
+│  REST API  │  gRPC  │  GraphQL          │
+├─────────────────────────────────────────┤
+│              Use Cases                  │
+│  CreateOrder  │  ListOrder              │
+├─────────────────────────────────────────┤
+│               Entities                  │
+│             Order                       │
+├─────────────────────────────────────────┤
+│            Infrastructure               │
+│  Database  │  Events  │  Web            │
+└─────────────────────────────────────────┘
+```
+
+---
+
+## 📝 Estrutura do Projeto
+
+```
+├── cmd/
+│   ├── initdb/          # Inicialização do banco
+│   └── ordersystem/     # Aplicação principal
+├── internal/
+│   ├── entity/          # Entidades de domínio
+│   ├── usecase/         # Casos de uso
+│   └── infra/           # Infraestrutura
+│       ├── database/    # Repositórios
+│       ├── grpc/        # Servidor gRPC
+│       ├── graph/       # GraphQL
+│       └── web/         # REST API
+├── api/                 # Arquivos de teste HTTP
+└── docker-compose.yml   # Configuração Docker
+```
+
+---
+
+## 🛠️ Tecnologias Utilizadas
+
+- **Go** - Linguagem principal
+- **MySQL** - Banco de dados
+- **Wire** - Injeção de dependência
+- **Chi Router** - HTTP router
+- **gRPC** - Comunicação RPC
+- **GraphQL** - Query language
+- **Docker** - Containerização
+
+---
+
+## 📸 Evidências de Teste
+
+### REST API
+![REST API Test](images/ListOrderHttpRequest.png)
+
+### gRPC
+![gRPC Test](images/ListOrderGRCP.png)
+
+### GraphQL
+![GraphQL Test](images/ListOrderGraphQL.png)
 
 
-Passo a passo para rodar a aplicação:
+---
 
-1º) Executar o comando: "docker compose up -d"
+## 📄 Licença
 
-2º) Para criar a tabela no banco de dados executar os comandos: "cd cmd/initdb; go run main.go"
-
-3º) Para executar a aplicação executar os comandos: "cd cmd/ordersystem; go run main.go wire_gen.go"
-    Os serviços iniciarão em:
-        Starting web server on port :8000
-        Starting gRPC server on port 50051
-        Starting GraphQL server on port 8081
-
-4º) Para testar:
-    4.1) web server:
-         Na pasta api/create_order.http selecione o "Send Request"
-         Na pasta api/list_order.http selecione o "Send Request"
-         [image: ListOrderHttpRequest.png]
-    4.2) gRPC:
-        Executar os comandos abaixo no terminal:
-        -para startar o evans => evans -r repl
-        -para setar o pacote => package pb
-        -para setar o serviço => service Order
-        -para chamar o método => call ListOrder
-        [image: ListOrderGRCP.png]
-    4.3) Graph:
-        abrir o navegador em localhost:8081/graphql
-        Colar e executar os comandos:
-        mutation createOrder{
-            createOrder(input: {id: "2", Price: 100, Tax: 10})
-            {
-                id,
-                Price,
-                Tax,
-                FinalPrice
-            }
-            }
-
-            query listOrder{
-            listOrder{
-                id,
-                Price,
-                Tax,
-                FinalPrice
-            }
-            }
-
-        [image: ListOrderGraphQL.png]
+Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
