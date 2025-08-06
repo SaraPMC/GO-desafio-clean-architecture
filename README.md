@@ -18,6 +18,43 @@ Passo a passo para rodar a aplicação:
 2º) Para criar a tabela no banco de dados executar os comandos: "cd cmd/initdb; go run main.go"
 
 3º) Para executar a aplicação executar os comandos: "cd cmd/ordersystem; go run main.go wire_gen.go"
+    Os serviços iniciarão em:
+        Starting web server on port :8000
+        Starting gRPC server on port 50051
+        Starting GraphQL server on port 8081
 
 4º) Para testar:
-    4.1) na pasta api/list_order.http selecione o "Send Request"
+    4.1) web server:
+         Na pasta api/create_order.http selecione o "Send Request"
+         Na pasta api/list_order.http selecione o "Send Request"
+         [image: ListOrderHttpRequest.png]
+    4.2) gRPC:
+        Executar os comandos abaixo no terminal:
+        -para startar o evans => evans -r repl
+        -para setar o pacote => package pb
+        -para setar o serviço => service Order
+        -para chamar o método => call ListOrder
+        [image: ListOrderGRCP.png]
+    4.3) Graph:
+        abrir o navegador em localhost:8081/graphql
+        Colar e executar os comandos:
+        mutation createOrder{
+            createOrder(input: {id: "2", Price: 100, Tax: 10})
+            {
+                id,
+                Price,
+                Tax,
+                FinalPrice
+            }
+            }
+
+            query listOrder{
+            listOrder{
+                id,
+                Price,
+                Tax,
+                FinalPrice
+            }
+            }
+
+        [image: ListOrderGraphQL.png]

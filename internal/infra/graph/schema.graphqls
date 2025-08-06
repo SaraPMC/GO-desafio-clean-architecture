@@ -16,7 +16,7 @@ type Mutation {
 }
 
 type Query {
-    listOrders: [Order!]!
+    listOrder: [Order!]!
 }
 
 # Para gerar o schema.graphqls
