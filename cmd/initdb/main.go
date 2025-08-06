@@ -46,3 +46,14 @@ func main() {
 	log.Println("✓ Banco de dados inicializado com sucesso!")
 	log.Println("Tabela(s) criada(s): orders")
 }
+
+//para rodar e criar a tabela orders:
+//cd cmd/initdb; go run main.go
+
+//Para acessar o BD no docker:
+//docker ps (para ver o que esta rodando)
+//docker exec -it <container_id> bash (para acessar o mysql dentro do container)
+//docker exec -it 7db5c70e0059 bash
+//mysql -u root -p orders
+//senha root
+//show databases;
