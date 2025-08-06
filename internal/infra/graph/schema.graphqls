@@ -14,3 +14,13 @@ input OrderInput {
 type Mutation {
     createOrder(input: OrderInput): Order
 }
+
+type Query {
+    listOrders: [Order!]!
+}
+
+# Para gerar o schema.graphqls
+# go run github.com/99designs/gqlgen init 
+
+# Para atualizar o schema.graphqls
+# go run github.com/99designs/gqlgen generate

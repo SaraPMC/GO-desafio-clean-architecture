@@ -49,3 +49,15 @@ func NewWebOrderHandler(db *sql.DB, eventDispatcher events.EventDispatcherInterf
 	)
 	return &web.WebOrderHandler{}
 }
+
+func NewListOrderUseCase(db *sql.DB) *usecase.ListOrderUseCase {
+	wire.Build(
+		setOrderRepositoryDependency,
+		usecase.NewListOrderUseCase,
+	)
+	return &usecase.ListOrderUseCase{}
+}
+
+//Para rodar o wire e gerar o wire_gen.go
+// go get github.com/google/wire/cmd/wire@latest
+// go generate ./cmd/ordersystem
