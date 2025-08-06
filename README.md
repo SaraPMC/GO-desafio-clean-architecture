@@ -220,13 +220,13 @@ query {
 ## 📸 Evidências de Teste
 
 ### REST API
-![REST API Test](images/ListOrderHttpRequest.png)
+![REST API Test](images/ListOrderHttpRequest.PNG)
 
 ### gRPC
-![gRPC Test](images/ListOrderGRCP.png)
+![gRPC Test](images/ListOrderGRPC.PNG)
 
 ### GraphQL
-![GraphQL Test](images/ListOrderGraphQL.png)
+![GraphQL Test](images/ListOrderGraphQL.PNG)
 
 
 ---
