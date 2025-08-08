@@ -1,8 +1,10 @@
 # 🏗️ Desafio Clean Architecture GO
 
-[![Go Version](https://img.shields.io/badge/Go-1.21+-blue.svg)](https://golang.org)
+[![Go Version](https://img.shields.io/badge/Go-1.23+-blue.svg)](https://golang.org)
 [![Docker](https://img.shields.io/badge/Docker-Required-blue.svg)](https://docker.com)
-[![MySQL](https://img.shields.io/badge/MySQL-8.0-orange.svg)](https://mysql.com)
+[![MySQL](https://img.shields.io/badge/MySQL-5.7-orange.svg)](https://mysql.com)
+[![RabbitMQ](https://img.shields.io/badge/RabbitMQ-3.0-ff6600.svg)](https://rabbitmq.com)
+[![Clean Architecture](https://img.shields.io/badge/Architecture-Clean-green.svg)](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
 
 ## 📋 Sobre o Projeto
 
@@ -183,8 +185,15 @@ query {
 ## 📊 Arquitetura
 
 ```
+🐳 DOCKER ARCHITECTURE
 ┌─────────────────────────────────────────┐
-│                Interfaces               │
+│            Container Services           │
+│  MySQL    │ RabbitMQ │    App           │
+│ :3306     │  :5672   │ :8000/:50051     │
+└─────────────────────────────────────────┘
+                    ⬇️
+┌─────────────────────────────────────────┐
+│           APPLICATION LAYERS            │
 │  REST API  │  gRPC  │  GraphQL          │
 ├─────────────────────────────────────────┤
 │              Use Cases                  │
@@ -222,13 +231,21 @@ query {
 
 ## 🛠️ Tecnologias Utilizadas
 
-- **Go** - Linguagem principal
-- **MySQL** - Banco de dados
+### Core
+- **Go 1.23** - Linguagem principal
+- **MySQL 5.7** - Banco de dados relacional
+- **RabbitMQ 3.0** - Message broker para eventos
+
+### Frameworks & Libraries
 - **Wire** - Injeção de dependência
-- **Chi Router** - HTTP router
-- **gRPC** - Comunicação RPC
-- **GraphQL** - Query language
-- **Docker** - Containerização
+- **Chi Router** - HTTP router minimalista
+- **gRPC** - Comunicação RPC de alta performance
+- **GraphQL (gqlgen)** - Query language flexível
+- **GORM** - ORM para Go (se estiver usando)
+
+### DevOps
+- **Docker & Docker Compose** - Containerização
+- **Health Checks** - Monitoramento de containers
 
 ---
 
