@@ -30,7 +30,7 @@ func main() {
 	}
 
 	// Cria tabela
-	createOrdersTable := `CREATE TABLE orders 
+	createOrdersTable := `CREATE TABLE IF NOT EXISTS orders 
 	(
 		id varchar(255) NOT NULL, 
 		price float NOT NULL, 

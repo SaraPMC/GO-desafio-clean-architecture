@@ -11,6 +11,11 @@ services:
       - 3306:3306
     volumes:
       - .docker/mysql:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
 
   rabbitmq:
     image: rabbitmq:3-management
@@ -22,3 +27,35 @@ services:
     environment:
       RABBITMQ_DEFAULT_USER: guest
       RABBITMQ_DEFAULT_PASS: guest
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build: .
+    depends_on:
+      mysql:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+      - "50051:50051"
+      - "8081:8081"
+    environment:                # DENTRO do Docker, usar nomes dos serviços      
+      DB_HOST: mysql            # ← Nome do serviço MySQL
+      DB_PORT: 3306
+      DB_USER: root
+      DB_PASSWORD: root
+      DB_NAME: orders
+      DB_DRIVER: mysql
+      WEB_SERVER_PORT: ":8000"
+      GRPC_SERVER_PORT: "50051"
+      GRAPHQL_SERVER_PORT: "8081"
+      RABBITMQ_HOST: rabbitmq   # ← Nome do serviço RabbitMQ
+      RABBITMQ_PORT: 5672
+      RABBITMQ_USER: guest
+      RABBITMQ_PASSWORD: guest
+    restart: unless-stopped

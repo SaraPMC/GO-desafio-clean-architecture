@@ -48,36 +48,49 @@ Implementar a listagem de pedidos (ListOrder) em um sistema já existente, garan
 - [Docker](https://www.docker.com/)
 - [Docker Compose](https://docs.docker.com/compose/)
 
-### 1️⃣ Subir o Banco de Dados
+### ✨ Execução Automática
 
 ```bash
-docker compose up -d
+# 🚀 Subir tudo (banco + migrações + aplicação)
+docker compose up --build -d
 ```
 
-> 🔍 **Verificar se subiu:** `docker ps`
-
-### 2️⃣ Inicializar o Banco de Dados
-
-```bash
-cd cmd/initdb
-go run main.go
-```
-
-### 3️⃣ Executar a Aplicação
-
-```bash
-cd cmd/ordersystem
-go run main.go wire_gen.go
-```
+> ⚠️ **Primeira execução**: Pode demorar 1-2 minutos para os health checks validarem que MySQL e RabbitMQ estão prontos
 
 ### ✅ Confirmação dos Serviços
 
-Se tudo estiver funcionando, você verá:
-
+#### Verificar logs da aplicação:
+```bash
+# Ver logs em tempo real
+docker compose logs -f app
 ```
+
+#### Se tudo estiver funcionando, você verá:
+```
+✓ Banco de dados inicializado com sucesso!
+Tabela(s) criada(s): orders
 Starting web server on port :8000
 Starting gRPC server on port 50051  
 Starting GraphQL server on port 8081
+```
+
+### 🔄 Comandos Úteis
+
+```bash
+# Ver status dos containers
+docker compose ps
+
+# Parar todos os serviços
+docker compose down
+
+# Rebuild completo (limpar volumes)
+docker compose down -v
+docker compose up --build -d
+
+# Ver logs de um serviço específico
+docker compose logs mysql
+docker compose logs rabbitmq
+docker compose logs app
 ```
 
 ---

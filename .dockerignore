@@ -1,0 +1,25 @@
+.git
+.docker
+node_modules
+*.log
+*.tmp
+.env.local
+.env.development
+.env.test
+.env.production
+.DS_Store
+Thumbs.db
+*.exe
+*.dll
+*.so
+*.dylib
+.vscode
+.idea
+*.swp
+*.swo
+*~
+# Binários Go
+cmd/ordersystem/ordersystem
+cmd/initdb/initdb
+# Dados do MySQL
+.docker/mysql/
