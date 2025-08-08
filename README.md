@@ -50,8 +50,8 @@ Implementar a listagem de pedidos (ListOrder) em um sistema já existente, garan
 
 ### ✨ Execução Automática
 
+🚀 Subir tudo (banco + migrações + aplicação)
 ```bash
-# 🚀 Subir tudo (banco + migrações + aplicação)
 docker compose up --build -d
 ```
 
@@ -59,16 +59,14 @@ docker compose up --build -d
 
 ### ✅ Confirmação dos Serviços
 
-#### Verificar logs da aplicação:
+#### Verificar logs em tempo real da aplicação:
 ```bash
-# Ver logs em tempo real
 docker compose logs -f app
 ```
 
 #### Se tudo estiver funcionando, você verá:
 ```
 ✓ Banco de dados inicializado com sucesso!
-Tabela(s) criada(s): orders
 Starting web server on port :8000
 Starting gRPC server on port 50051  
 Starting GraphQL server on port 8081
@@ -76,18 +74,22 @@ Starting GraphQL server on port 8081
 
 ### 🔄 Comandos Úteis
 
+- Ver status dos containers:
 ```bash
-# Ver status dos containers
 docker compose ps
-
-# Parar todos os serviços
+```
+- Parar todos os serviços:
+```bash
 docker compose down
+```
 
-# Rebuild completo (limpar volumes)
+- Rebuild completo (limpar volumes)
+```bash
 docker compose down -v
 docker compose up --build -d
-
-# Ver logs de um serviço específico
+```
+- Ver logs de um serviço específico
+```bash
 docker compose logs mysql
 docker compose logs rabbitmq
 docker compose logs app

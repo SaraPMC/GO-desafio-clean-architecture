@@ -44,7 +44,6 @@ func main() {
 	}
 
 	log.Println("✓ Banco de dados inicializado com sucesso!")
-	log.Println("Tabela(s) criada(s): orders")
 }
 
 //para rodar e criar a tabela orders:
